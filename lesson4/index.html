@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+        1.  Написать функцию, преобразующую число в объект. Передавая
+            на вход число от 0 до 999, надо получить на выходе объект, в
+            котором в соответствующих свойствах описаны единицы, десятки
+            и сотни. Например, для числа 245 надо получить следующий
+            объект: {‘единицы’: 5, ‘десятки’: 4, ‘сотни’: 2}. Если число
+            превышает 999, необходимо выдать соответствующее сообщение
+            с помощью console.log и вернуть пустой объект.
+            */
+                function getNumberData(number){ 
+                let units = number % 10
+                let tens = ( number % 100 - units ) / 10
+                let hundreds = ( number - tens*10 - units ) / 100
+                
+                    return {
+                        hundreds, 
+                        tens,     
+                        units,    
+                    };
+                }
+                //console.log(getNumberData(333));
+                //console.log(getNumberData(100));
+                //console.log(getNumberData(10));
+                //console.log(getNumberData(2));
+                //console.log(getNumberData(0));
+            /*
+        
+        2.  Продолжить работу с интернет-магазином:
+
+            a.  В прошлом домашнем задании вы реализовали корзину на базе  
+                массивов. Какими объектами можно заменить их элементы? 
+                
+                В прошлом дз я сразу создавал масив объектов .
+
+            b.  Реализуйте такие объекты.
+
+            c.  Перенести функционал подсчета корзины на объектноориентированную базу.
+
+                */
+                const product = [       // a
+                {name : "fish" , price : 50.40 , count : 1 },
+                {name : "rice" , price : 10.99 , count : 4 },
+                {name : "carrot" , price : 5.66 , count : 3 },
+                {name : "cabbage" , price : 56 , count : 20 },
+            ]
+            
+            function countBasketPrice(){       // b
+                let result = 0; // создаю переменную для вывода результата 
+                const elemPrice = []; // создаю пустой массив 
+                product.forEach(elem=>{ // беру в каждой итерации объет из масива
+                    elemPrice.push(elem.price*elem.count); // достаю из объета цену и колицество , перемножаю и кладу в конец зарание созданного масива 
+                })
+                let totalPrice = 0; // создаю переменную для хранения общей ценны всех товаров 
+                let i = 0;  // создаю переменную для хранения значения текущей итерации
+                elemPrice.forEach(el=>{ // беру в каждой итерации елемент из масива
+                    totalPrice = totalPrice + el; // переопределяю значение переменной увиличивая её значение прибавляя к ней каждый из елементов
+                    i++; // увеличиваю счетчик
+                    if(i == elemPrice.length){  // сравниваю значение счетчика с длинной масива 
+                        result = totalPrice; // переопределяю значение переменной 
+                    }
+                })
+                return result; // возвращаю результат работы функции в место вызова .  
+            }
+            
+            console.log(countBasketPrice());   // функция console.log() получает результат работы функции countBasketPrice() и выводит его в консоль .
+               
+            /*
+
+
+
+
+
+        3.  * Подумать над глобальными сущностями. К примеру, сущность «Продукт»
+            в интернет-магазине актуальна не только для корзины, но и для каталога.
+            Стремиться нужно к тому, чтобы объект «Продукт» имел единую структуру
+            для различных модулей сайта, но в разных местах давал возможность
+            вызывать разные методы.
+
+            объект имеет доступ к своим методам вне зависимости от его расположения
+
+            product{
+                name : mouse
+                img : http//....
+                price : 57
+                count : 1
+
+                getImg(){
+                    return this.img
+                }
+                getPrice(){
+                    return this.price
+                }
+                getName(){
+                    return this.name
+                }
+                getDescription(){
+                    return this.description
+                }
+                getReviews(){
+                    this.reviews
+                }
+                getCount(){
+                    return this.count
+                }
+            }
+
+
+            например каталог
+
+                product.getImg()
+                product.getPrice()
+                product.getName()
+
+            а в корзине
+            
+                product.getCount()
+                product.getPrice()
+                product.getName()
+
+            на странице продукта 
+
+                product.getImg()
+                product.getPrice()
+                product.getName()
+                product.getDescription()
+                product.getReviews()
+        */
+        
+
+        
+        
+    </script>
+</body>
+</html>
