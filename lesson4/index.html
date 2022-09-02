@@ -16,64 +16,61 @@
             объект: {‘единицы’: 5, ‘десятки’: 4, ‘сотни’: 2}. Если число
             превышает 999, необходимо выдать соответствующее сообщение
             с помощью console.log и вернуть пустой объект.
-            */
+
                 function getNumberData(number){ 
                 let units = number % 10
                 let tens = ( number % 100 - units ) / 10
                 let hundreds = ( number - tens*10 - units ) / 100
-                
-                    return {
-                        hundreds, 
-                        tens,     
-                        units,    
+                    
+                    if(number > 999){
+                        console.log("Ошибка , ваше число привышает лимит в 999") 
+                        return {};
+                    }else{
+                        return {
+                            hundreds, 
+                            tens,     
+                            units,    
+                        };
                     };
+                    
                 }
                 //console.log(getNumberData(333));
                 //console.log(getNumberData(100));
                 //console.log(getNumberData(10));
                 //console.log(getNumberData(2));
                 //console.log(getNumberData(0));
-            /*
+        
         
         2.  Продолжить работу с интернет-магазином:
 
             a.  В прошлом домашнем задании вы реализовали корзину на базе  
                 массивов. Какими объектами можно заменить их элементы? 
-                
-                В прошлом дз я сразу создавал масив объектов .
 
             b.  Реализуйте такие объекты.
 
             c.  Перенести функционал подсчета корзины на объектноориентированную базу.
 
                 */
-                const product = [       // a
-                {name : "fish" , price : 50.40 , count : 1 },
-                {name : "rice" , price : 10.99 , count : 4 },
-                {name : "carrot" , price : 5.66 , count : 3 },
-                {name : "cabbage" , price : 56 , count : 20 },
-            ]
-            
-            function countBasketPrice(){       // b
-                let result = 0; // создаю переменную для вывода результата 
-                const elemPrice = []; // создаю пустой массив 
-                product.forEach(elem=>{ // беру в каждой итерации объет из масива
-                    elemPrice.push(elem.price*elem.count); // достаю из объета цену и колицество , перемножаю и кладу в конец зарание созданного масива 
-                })
-                let totalPrice = 0; // создаю переменную для хранения общей ценны всех товаров 
-                let i = 0;  // создаю переменную для хранения значения текущей итерации
-                elemPrice.forEach(el=>{ // беру в каждой итерации елемент из масива
-                    totalPrice = totalPrice + el; // переопределяю значение переменной увиличивая её значение прибавляя к ней каждый из елементов
-                    i++; // увеличиваю счетчик
-                    if(i == elemPrice.length){  // сравниваю значение счетчика с длинной масива 
-                        result = totalPrice; // переопределяю значение переменной 
+                
+                       
+            const cart = {
+                products : [
+                    {name : "fish" , price : 50.40 , count : 1 },
+                    {name : "rice" , price : 10.99 , count : 4 },
+                    {name : "carrot" , price : 5.66 , count : 3 },
+                    {name : "cabbage" , price : 56 , count : 20 },
+                ],
+
+                countBasketPrice(){
+                    let result = null;
+                    for (const elem of this.products) {
+                        result += elem.price;
                     }
-                })
-                return result; // возвращаю результат работы функции в место вызова .  
+                    return result;
+                }
             }
-            
-            console.log(countBasketPrice());   // функция console.log() получает результат работы функции countBasketPrice() и выводит его в консоль .
-               
+
+            console.log(cart.countBasketPrice());
             /*
 
 
