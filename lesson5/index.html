@@ -43,6 +43,12 @@
         .chess-cell_white{
             background-color: white;
         }
+        .white-figure{
+            color: rgb(160, 129, 129);
+        }
+        .black-figure{
+            color: rgb(167, 106, 26);
+        }
         /*стили для каталога*/
         #catalog{
             width: 33.3%;
@@ -63,15 +69,17 @@
             width: 100%;
             height: 100%;
         }
-        
+        .shop{
+            width: 33.3%;
+        }
     </style>
+    <script src="https://kit.fontawesome.com/362708026e.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
         <div id="catalog"></div> <!--тело каталога-->
         <div class="chess-board"></div> <!-- тело шахматной доски -->
         <div class="shop"></div> <!--тело корзины-->
-        
         
     </div>
     <script>
@@ -89,45 +97,85 @@
             3.2. При загрузке страницы на базе данного массива генерировать вывод из него. HTML-код должен содержать только div id=”catalog”
             без вложенного кода. Весь вид каталога генерируется JS.
          */
+        class Board{
+            alphabet = ["A", "B", "C", "D", "E", "F", "G", "H"];// массив для отображения букв
+            basicPosition = [
+                {name : "rook-black"   ,position : `#A-1` , icon : `<i class="fa-solid fa-chess-rook black-figure"></i>`},
+                {name : "rook-black"   ,position : `#H-1` , icon : `<i class="fa-solid fa-chess-rook black-figure"></i>`},
+                {name : "rook-white"   ,position : `#A-8` , icon : `<i class="fa-solid fa-chess-rook white-figure"></i>`},
+                {name : "rook-white"   ,position : `#H-8` , icon : `<i class="fa-solid fa-chess-rook white-figure"></i>`},
+                {name : "knight-black" ,position : `#B-1` , icon : `<i class="fa-solid fa-chess-knight black-figure"></i>`},
+                {name : "knight-black" ,position : `#G-1` , icon : `<i class="fa-solid fa-chess-knight black-figure"></i>`},
+                {name : "knight-white" ,position : `#B-8` , icon : `<i class="fa-solid fa-chess-knight white-figure"></i>`},
+                {name : "knight-white" ,position : `#G-8` , icon : `<i class="fa-solid fa-chess-knight white-figure"></i>`},
+                {name : "bishop-black" ,position : `#C-1` , icon : `<i class="fa-solid fa-chess-bishop black-figure"></i>`},
+                {name : "bishop-black" ,position : `#F-1` , icon : `<i class="fa-solid fa-chess-bishop black-figure"></i>`},
+                {name : "bishop-white" ,position : `#C-8` , icon : `<i class="fa-solid fa-chess-bishop white-figure"></i>`},
+                {name : "bishop-white" ,position : `#F-8` , icon : `<i class="fa-solid fa-chess-bishop white-figure"></i>`},
+                {name : "king-black"   ,position : `#D-1` , icon : `<i class="fa-solid fa-chess-king black-figure"></i>`},
+                {name : "king-white"   ,position : `#D-8` , icon : `<i class="fa-solid fa-chess-king white-figure"></i>`},
+                {name : "queen-black"  ,position : `#E-1` , icon : `<i class="fa-solid fa-chess-queen black-figure"></i>`},
+                {name : "queen-white"  ,position : `#E-8` , icon : `<i class="fa-solid fa-chess-queen white-figure"></i>`},
+                
+            ]
 
-        
 
-        function renderchessboard(){   // функция генерации щахматной доски 
-            const chessBoard = document.querySelector(".chess-board"); // создание блока доски
+            renderChessBoard(){   // функция генерации щахматной доски 
             const refCell = document.createElement("div");  // создание ячейки 
             refCell.classList.add("chess-cell");    // добавление класса для ячейки
-            const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H"]; // массив для отображения букв 
-            
-
-            for(let colomn = 0; colomn <= 9; colomn++){ // генерация колонок 
-                if(colomn == 0 || colomn == 9){ // ячейки  1 и 10 
-                    for(let rows = 0; rows <= 9; rows++){   // генерация и добавления ячеек с цифрой от 1 до 8
-                        let cell = refCell.cloneNode(true); // полное клонирование ячейки
-                        chessBoard.appendChild(cell); // добавление ячейки
-                        if(rows > 0 && rows < 9){ // условие при котором ячейкам от 1й до 8й добавляется нумерация
-                            cell.textContent = rows
+            const chessBoard = document.querySelector(".chess-board"); // создание блока доски
+                for(let colomn = 0; colomn <= 9; colomn++){ // генерация колонок 
+                    if(colomn == 0 || colomn == 9){ // ячейки  1 и 10 
+                        for(let rows = 0; rows <= 9; rows++){   // генерация и добавления ячеек с цифрой от 1 до 8
+                            let cell = refCell.cloneNode(true); // полное клонирование ячейки
+                            chessBoard.appendChild(cell); // добавление ячейки
+                            if(rows > 0 && rows < 9){ // условие при котором ячейкам от 1й до 8й добавляется нумерация
+                                cell.textContent = rows
+                            }
                         }
                     }
-                }
-                else{ // ячейки с 2 по 9
-                    for(let rows = 0; rows <= 9; rows++){ 
-                        let cell = refCell.cloneNode(true); // клонирование ячейки
-                        chessBoard.appendChild(cell); // добавляет ячейки с 2 по 9 
-
-                        if(rows == 0 || rows == 9){ // для первой и последней строки
-                            cell.textContent = alphabet[colomn-1] // для каждой ячейки из последней и первой строки добавляется соответствующий символ из масива
-                        }else{
-                            if(rows % 2 != 0 && colomn % 2 != 0 || colomn % 2 == 0 && rows % 2 == 0){ // при условии что четная строка и четная колонка или не четная строка и не четная колонка
-                                cell.classList.add("chess-cell_black"); // добавляет класс ячейки который окрашивает её в черный 
-                            }else{  
-                                cell.classList.add("chess-cell_white"); // окрашивает все остальные ячейки 
-                            }
-                        }       
+                    else{ // ячейки с 2 по 9
+                        for(let rows = 0; rows <= 9; rows++){ 
+                            let cell = refCell.cloneNode(true); // клонирование ячейки
+                            chessBoard.appendChild(cell); // добавляет ячейки с 2 по 9 
+                            
+                            if(rows == 0 || rows == 9){ // для первой и последней строки
+                                cell.textContent = this.alphabet[colomn-1] // для каждой ячейки из последней и первой строки добавляется соответствующий символ из масива
+                            }else{
+                                cell.id = `${this.alphabet[colomn-1]}-${rows}` // добавляем индефикаторы ячейкам доски
+                                if(rows % 2 != 0 && colomn % 2 != 0 || colomn % 2 == 0 && rows % 2 == 0){ // при условии что четная строка и четная колонка или не четная строка и не четная колонка
+                                    cell.classList.add("chess-cell_black"); // добавляет класс ячейки который окрашивает её в черный 
+                                }
+                                else{  
+                                    cell.classList.add("chess-cell_white"); // окрашивает все остальные ячейки 
+                                }
+                            }       
+                        }
                     }
+                }    
+            }
+            renderBoard(){
+                this.renderChessBoard();
+                this.renderShapes();
+            }
+            renderShapes(){
+                for(let i = 0;i<8;i++){ 
+                    document.querySelector(`#${this.alphabet[i]}-2`).innerHTML = `<i class="fa-solid fa-chess-pawn black-figure"></i>`// пешки черных
+                    document.querySelector(`#${this.alphabet[i]}-7`).innerHTML = `<i class="fa-solid fa-chess-pawn white-figure"></i>`// пешки белых    
                 }
-            }    
+                
+                this.basicPosition.forEach(elem=>{
+                    document.querySelector(elem.position).innerHTML = elem.icon
+                })
+            }
+            
+            
         }
-        renderchessboard(); 
+        new Board().renderBoard()
+        
+        
+
+        
 
         const cart = { // перенесено из 4-го дз
             products : [
@@ -190,8 +238,8 @@
         }
         renderCatalog()
         
-
         
+
     </script>
 </body>
 </html>
