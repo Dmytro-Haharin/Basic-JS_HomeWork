@@ -179,4 +179,12 @@
   padding: 10px 20px;
   background-color: green;
 }
+
+.basket__content {
+  display: none;
+}
+
+.basket__content_active {
+  display: block;
+}
 /*# sourceMappingURL=style.css.map */

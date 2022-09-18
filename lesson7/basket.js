@@ -55,6 +55,9 @@ const cart = {
             }
         };
     },
+    swichChapter(){
+
+    },
 };
 console.log();
 document.querySelector(".cart").addEventListener("click", event=>{
@@ -81,5 +84,17 @@ document.querySelector(".cart").addEventListener("click", event=>{
     cart.renderCart()
     cart.getPriceBasket()
 })
+
+const basketPage = document.querySelector(".basket-page__wrapper")
+let basketPageCount = 0
+basketPage.addEventListener("click" , event=>{
+    if(event.target.classList.contains("next-chapter")){
+        event.target.closest(".basket__content").classList.remove("basket__content_active")
+        basketPageCount++
+        basketPage.children[basketPageCount].querySelector(".basket__content").classList.add("basket__content_active")
+        
+    }
+})
+
 cart.renderCart()
 cart.getPriceBasket()
