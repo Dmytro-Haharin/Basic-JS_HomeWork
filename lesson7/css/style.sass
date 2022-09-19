@@ -1,0 +1,112 @@
+.container
+    max-width: 1400px
+    margin: 0 auto
+::-webkit-scrollbar
+    width: 0
+
+.header
+    display: flex
+    justify-content: space-between
+.basket-page
+    cursor: pointer
+.wrapper__modal-screen
+    background-color: rgba(37,37,37,30)
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 100vh
+    width: 100%
+    z-index: -999
+    top: 0
+    left: 0
+    position: fixed
+.modal-screen
+    position: fixed
+    img
+        width: 100%
+        height: 100%
+        
+    &__arr
+        width: 50px
+        height: 100px
+        background-color: #626262
+        text-align: center
+        line-height: 100px
+        border-radius: 100px
+        font-size: 50px
+        z-index: -1
+        cursor: pointer
+        
+            background-color: red
+        &_left
+            position: relative
+            left: 20px
+        &_right
+            position: relative
+            right: 20px
+       
+        
+.close 
+    display: flex
+    align-self: flex-start
+    margin-top: 5%
+    font-size: 50px
+    cursor: pointer
+
+    
+    
+.active
+    z-index: 999
+
+.catalog
+    display: grid
+    grid-template-columns: 1fr 1fr
+    background-color: #5d5d5d
+.cart
+    display: flex
+    flex-direction: row
+    position: relative
+    flex-wrap: wrap
+    margin-bottom: 50px
+.product-cart
+    display: flex
+    flex-direction: column
+    width: 500px
+    background-color: #fff
+    justify-content: space-between
+    padding: 10px
+    margin-left: 10px
+    background-color: #ae5757
+    margin: 10px
+    p
+        display: flex
+        flex-direction: column
+.all-price
+    position: absolute
+    bottom: -35px
+    left: 50%
+    background-color: green
+    padding: 10px
+.product-card
+    display: flex
+    flex-direction: column
+    width: 500px
+    background-color: #fff
+    justify-content: space-between
+    margin: 10px
+    padding: 13px
+.container
+    position: relative
+.basket-composition__heading
+    text-align: center
+    background-color: red
+.next-chapter__wrapper
+    text-align: right
+.next-chapter
+    padding: 10px 20px
+    background-color: green
+
+.basket__content
+    display: none
+    &_active
+      display: block  

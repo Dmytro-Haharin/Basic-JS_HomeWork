@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*обнуление стилей */
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .container{ /*контейнер*/
+            display: flex;
+            justify-content: space-between;
+        }
+        /*стили для шахматной доски */
+        body{
+            background-color: rgb(224, 111, 111);
+        }
+        .chess-board{
+            display: flex;
+            flex-direction: column-reverse;
+            flex-wrap: wrap;
+            width: 500px;
+            height: 500px;
+            
+        }
+        .chess-cell{
+            width: 50px;
+            height: 50px;
+            background-color: firebrick;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 700;
+        }
+        .chess-cell_black{ 
+            background-color: black;
+        }
+        .chess-cell_white{
+            background-color: white;
+        }
+        .white-figure{
+            color: rgb(160, 129, 129);
+        }
+        .black-figure{
+            color: rgb(167, 106, 26);
+        }
+        /*стили для каталога*/
+        #catalog{
+            width: 33.3%;
+        }
+        #catalog{
+            display: grid;
+            grid-template: 1fr 1fr / 1fr 1fr;
+            grid-gap: 3%;
+            margin-left: 100px;
+        }
+        .catalog__product{
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-img{
+            width: 100%;
+            height: 100%;
+        }
+        .shop{
+            width: 33.3%;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/362708026e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="catalog"></div> <!--тело каталога-->
+        <div class="chess-board"></div> <!-- тело шахматной доски -->
+        <div class="shop"></div> <!--тело корзины-->
+        
+    </div>
+    <script>
+        /*
+            1. Создать функцию, генерирующую шахматную доску. При этом можно использовать любые html-теги по своему желанию. 
+                Доска должна быть разлинована соответствующим образом, т.е. чередовать черные и белые ячейки.
+                Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H. (использовать createElement / appendChild)
+            2. Сделать генерацию корзины динамической:
+                верстка корзины не должна находиться в HTML-структуре. Там должен быть только div,
+                в который будет вставляться корзина, сгенерированная на базе JS:
+                    2.1. Пустая корзина должна выводить строку «Корзина пуста»;
+                    2.2. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+            3*. Сделать так, чтобы товары в каталоге выводились при помощи JS:
+            3.1. Создать массив товаров (сущность Product);
+            3.2. При загрузке страницы на базе данного массива генерировать вывод из него. HTML-код должен содержать только div id=”catalog”
+            без вложенного кода. Весь вид каталога генерируется JS.
+         */
+        class Board{
+            alphabet = ["A", "B", "C", "D", "E", "F", "G", "H"];// массив для отображения букв
+            basicPosition = [
+                {name : "rook-black"   ,position : `#A-1` , icon : `<i class="fa-solid fa-chess-rook black-figure"></i>`},
+                {name : "rook-black"   ,position : `#H-1` , icon : `<i class="fa-solid fa-chess-rook black-figure"></i>`},
+                {name : "rook-white"   ,position : `#A-8` , icon : `<i class="fa-solid fa-chess-rook white-figure"></i>`},
+                {name : "rook-white"   ,position : `#H-8` , icon : `<i class="fa-solid fa-chess-rook white-figure"></i>`},
+                {name : "knight-black" ,position : `#B-1` , icon : `<i class="fa-solid fa-chess-knight black-figure"></i>`},
+                {name : "knight-black" ,position : `#G-1` , icon : `<i class="fa-solid fa-chess-knight black-figure"></i>`},
+                {name : "knight-white" ,position : `#B-8` , icon : `<i class="fa-solid fa-chess-knight white-figure"></i>`},
+                {name : "knight-white" ,position : `#G-8` , icon : `<i class="fa-solid fa-chess-knight white-figure"></i>`},
+                {name : "bishop-black" ,position : `#C-1` , icon : `<i class="fa-solid fa-chess-bishop black-figure"></i>`},
+                {name : "bishop-black" ,position : `#F-1` , icon : `<i class="fa-solid fa-chess-bishop black-figure"></i>`},
+                {name : "bishop-white" ,position : `#C-8` , icon : `<i class="fa-solid fa-chess-bishop white-figure"></i>`},
+                {name : "bishop-white" ,position : `#F-8` , icon : `<i class="fa-solid fa-chess-bishop white-figure"></i>`},
+                {name : "king-black"   ,position : `#D-1` , icon : `<i class="fa-solid fa-chess-king black-figure"></i>`},
+                {name : "king-white"   ,position : `#D-8` , icon : `<i class="fa-solid fa-chess-king white-figure"></i>`},
+                {name : "queen-black"  ,position : `#E-1` , icon : `<i class="fa-solid fa-chess-queen black-figure"></i>`},
+                {name : "queen-white"  ,position : `#E-8` , icon : `<i class="fa-solid fa-chess-queen white-figure"></i>`},
+                
+            ]
+
+
+            renderChessBoard(){   // функция генерации щахматной доски 
+            const refCell = document.createElement("div");  // создание ячейки 
+            refCell.classList.add("chess-cell");    // добавление класса для ячейки
+            const chessBoard = document.querySelector(".chess-board"); // создание блока доски
+                for(let colomn = 0; colomn <= 9; colomn++){ // генерация колонок 
+                    if(colomn == 0 || colomn == 9){ // ячейки  1 и 10 
+                        for(let rows = 0; rows <= 9; rows++){   // генерация и добавления ячеек с цифрой от 1 до 8
+                            let cell = refCell.cloneNode(true); // полное клонирование ячейки
+                            chessBoard.appendChild(cell); // добавление ячейки
+                            if(rows > 0 && rows < 9){ // условие при котором ячейкам от 1й до 8й добавляется нумерация
+                                cell.textContent = rows
+                            }
+                        }
+                    }
+                    else{ // ячейки с 2 по 9
+                        for(let rows = 0; rows <= 9; rows++){ 
+                            let cell = refCell.cloneNode(true); // клонирование ячейки
+                            chessBoard.appendChild(cell); // добавляет ячейки с 2 по 9 
+                            
+                            if(rows == 0 || rows == 9){ // для первой и последней строки
+                                cell.textContent = this.alphabet[colomn-1] // для каждой ячейки из последней и первой строки добавляется соответствующий символ из масива
+                            }else{
+                                cell.id = `${this.alphabet[colomn-1]}-${rows}` // добавляем индефикаторы ячейкам доски
+                                if(rows % 2 != 0 && colomn % 2 != 0 || colomn % 2 == 0 && rows % 2 == 0){ // при условии что четная строка и четная колонка или не четная строка и не четная колонка
+                                    cell.classList.add("chess-cell_black"); // добавляет класс ячейки который окрашивает её в черный 
+                                }
+                                else{  
+                                    cell.classList.add("chess-cell_white"); // окрашивает все остальные ячейки 
+                                }
+                            }       
+                        }
+                    }
+                }    
+            }
+            renderBoard(){
+                this.renderChessBoard();
+                this.renderShapes();
+            }
+            renderShapes(){
+                for(let i = 0;i<8;i++){ 
+                    document.querySelector(`#${this.alphabet[i]}-2`).innerHTML = `<i class="fa-solid fa-chess-pawn black-figure"></i>`// пешки черных
+                    document.querySelector(`#${this.alphabet[i]}-7`).innerHTML = `<i class="fa-solid fa-chess-pawn white-figure"></i>`// пешки белых    
+                }
+                
+                this.basicPosition.forEach(elem=>{
+                    document.querySelector(elem.position).innerHTML = elem.icon
+                })
+            }
+            
+            
+        }
+        new Board().renderBoard()
+        
+        
+
+        
+
+        const cart = { // перенесено из 4-го дз
+            products : [
+                {name : "fish" , price : 50.40 ,img : "https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_1920,f_auto/DCTM_Penguin_UK_DK_AL644648_p7nd0z.jpg", count : 1 },
+                {name : "rice" , price : 10.99 ,img : "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2020/06/23/0/FNK_Perfect-Long-Grain-White-Rice-H_s4x3.jpg.rend.hgtvcom.616.462.suffix/1592939598668.jpeg", count : 4 },
+                {name : "carrot" , price : 5.66,img : "https://kiranacompare.com/wp-content/uploads/2020/11/The-lost-plot-growing-carrots-iStock-471680420.jpg", count : 3 },
+                {name : "cabbage" , price : 56 ,img : "https://dictionary.cambridge.org/ru/images/thumb/cabbag_noun_002_05130.jpg?version=5.0.250", count : 20 },
+            ],
+
+            countBasketPrice(){
+                let result = null;
+                for (const elem of this.products) {
+                    result += elem.price;
+                }
+                return result;
+            }
+        }
+
+        function renderCart(){ // функция генерация корзины
+            const cartBody = document.querySelector(".shop"); // получение блока корзины
+            const productInnerCart = [];    // создание масива иметирующего наличие или отсутствие товаров
+            for(let i=0;i<2;i++){   // получение и добавление товаров из объекта cart
+                productInnerCart.push(cart.products[i])
+            }
+            if(productInnerCart == 0){ // проверка на наличие товаров в корзине
+                cartBody.insertAdjacentHTML( "beforeend",`Корзина пуста`) 
+            }else{
+                let m = null // создание переменной для хранения суммы товаров 
+                productInnerCart.forEach(element => {
+                    m += element.price*element.count // генерация суммы товаров на основе количества и цен товаров 
+                });
+                cartBody.insertAdjacentHTML( "beforeend",`
+                В корзине: ${productInnerCart.length} товаров на сумму ${m} рублей
+                `) // вывод количества и суммы товаров .
+            }
+
+
+
+        }
+        renderCart()
+
+        function renderCatalog(){ // функция генерации каталога на основе объекта cart
+            const catalogBody = document.querySelector("#catalog"); // получение блока каталога
+            
+            
+            for (const product of cart.products) { // получение массива из объекта 
+                catalogBody.insertAdjacentHTML("afterbegin", `  
+                <div class="catalog__product">
+                    <h2 class="product-heading">${product.name}</h2>
+                    <img class="product-img" src="${product.img}" alt="${product.name}">
+                    <span class=product-price>${product.price}</span>
+                    <button>Добавить в корзину</button>
+                </div>
+            `) // добавление разметки собраной на основе массива из объекта 
+            }
+            
+            
+            
+
+        }
+        renderCatalog()
+        
+        
+
+    </script>
+</body>
+</html>
